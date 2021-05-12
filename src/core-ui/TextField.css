@@ -1,0 +1,8 @@
+.text-field {
+  border-width: 0;
+  background: transparent;
+}
+
+.text-field:focus {
+  outline: none;
+}
