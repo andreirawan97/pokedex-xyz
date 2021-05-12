@@ -1,8 +1,8 @@
-export const RENDER_WIDTH = 380;
+export const MEDIA_QUERY_WIDTH = 600;
 
 export const MEDIA_QUERY = {
-  maxWidth: `@media (max-width: ${RENDER_WIDTH}px)`,
-  minWidth: `@media (min-width: ${RENDER_WIDTH}px)`,
+  maxWidth: `@media (max-width: ${MEDIA_QUERY_WIDTH}px)`,
+  minWidth: `@media (min-width: ${MEDIA_QUERY_WIDTH}px)`,
 };
 
 export const FONT_SIZE = {
