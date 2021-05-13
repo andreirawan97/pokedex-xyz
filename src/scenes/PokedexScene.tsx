@@ -10,10 +10,12 @@ import { GET_POKEMONS } from "../graphql/server/getPokemons";
 import {
   GetPokemons,
   GetPokemonsVariables,
+  GetPokemons_pokemon_v2_pokemon,
 } from "../generated/server/GetPokemons";
 import { PokemonSelection } from "../components";
 import { pokedexImage } from "../assets";
 import { useState } from "react";
+import { SCENE_NAME } from "../constants/navigation";
 
 export default function PokedexScene() {
   const history = useHistory();
@@ -37,6 +39,10 @@ export default function PokedexScene() {
     setCurrentPageIndex(currentPageIndex - 1);
   };
 
+  const onClickPokemon = (pokemon: GetPokemons_pokemon_v2_pokemon) => {
+    history.push(`${SCENE_NAME.pokemonDetail}${pokemon.name}`);
+  };
+
   return (
     <div className={styles.root}>
       <div className={styles.headerContainer}>
@@ -57,7 +63,10 @@ export default function PokedexScene() {
       <div className={styles.pokemonListContainer}>
         {data?.pokemon_v2_pokemon.map((pokemon) => (
           <div className={styles.pokemonSelectionContainer}>
-            <PokemonSelection pokemon={pokemon} />
+            <PokemonSelection
+              onClick={() => onClickPokemon(pokemon)}
+              pokemon={pokemon}
+            />
           </div>
         ))}
       </div>

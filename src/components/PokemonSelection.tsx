@@ -10,7 +10,7 @@ import "./PokemonSelection.css";
 
 type Props = {
   pokemon: GetPokemons_pokemon_v2_pokemon;
-  onClick?: (pokemonId: number) => void;
+  onClick?: (pokemonName: string) => void;
 };
 
 export default function PokemonSelection(props: Props) {
@@ -41,6 +41,7 @@ export default function PokemonSelection(props: Props) {
       className={`pokemon-selection ${styles.container} ${css({
         backgroundColor,
       })}`}
+      onClick={() => onClick && onClick(pokemon.name)}
     >
       <div className={styles.contentContainer}>
         <Text className={styles.pokemonNumber}>#{pokemon.id}</Text>

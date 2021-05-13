@@ -14,6 +14,7 @@ export const colors = {
   darkGrey: "#515151",
   indianRed: "#d57667",
   crimson: "#a42057",
+  lightPink: "#f4c4b3",
   pokemonTypes: {
     grass: "#4E8234",
     fire: "#9C531F",
