@@ -1,52 +1,71 @@
 import { css } from "@emotion/css";
-import { pokedexImage } from "../assets";
 
+import { myPokemonImage, pokedexImage } from "../assets";
 import { colors } from "../constants/colors";
-import { FONT_SIZE } from "../constants/style";
+import { FONT_SIZE, RENDER_CONTAINER_WIDTH } from "../constants/style";
 import { Text } from "../core-ui";
 
 import "./ModuleSelection.css";
 
-type ModuleType = "pokedex";
+type ModuleType = "pokedex" | "myPokemon";
 
 type Props = {
   moduleType: ModuleType;
   containerClassName?: string;
+  onClick?: () => void;
 };
 
 export default function ModuleSelection(props: Props) {
-  const { moduleType, containerClassName } = props;
+  const { moduleType, containerClassName, onClick } = props;
 
-  const backgroundClass = css({
-    backgroundColor:
-      moduleType === "pokedex" ? colors.green : colors.darkSlateBlue,
-  });
-
-  const getModuleImage = () => {
+  const getModuleConfig = () => {
     switch (moduleType) {
       case "pokedex": {
-        return pokedexImage;
+        return {
+          color: colors.green,
+          text: "Pokédex",
+          image: pokedexImage,
+        };
+      }
+      case "myPokemon": {
+        return {
+          color: colors.indianRed,
+          text: "My Pokemon",
+          image: myPokemonImage,
+        };
       }
       default: {
-        return pokedexImage;
+        return {
+          color: colors.darkSlateBlue,
+          text: "",
+        };
       }
     }
   };
 
   return (
     <div
-      className={`module-selection ${styles.container} ${backgroundClass} ${containerClassName}`}
+      className={`module-selection ${styles.container} ${css({
+        backgroundColor: getModuleConfig().color,
+      })} ${containerClassName}`}
+      onClick={onClick}
+      {...props}
     >
-      <Text className={styles.moduleText}>Pokédex</Text>
-      <img src={getModuleImage()} alt="" className={styles.moduleImage} />
+      <Text className={styles.moduleText}>{getModuleConfig().text}</Text>
+      <img
+        src={getModuleConfig().image}
+        alt=""
+        className={styles.moduleImage}
+      />
     </div>
   );
 }
 
 const styles = {
   container: css({
+    maxWidth: RENDER_CONTAINER_WIDTH - 108,
     display: "flex",
-    borderRadius: 8,
+    borderRadius: 20,
     paddingLeft: 18,
     paddingRight: 18,
     paddingTop: 14,

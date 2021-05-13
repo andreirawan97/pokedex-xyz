@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 import { pokemonBackground } from "../assets";
 import { colors } from "../constants/colors";
-import { MEDIA_QUERY } from "../constants/style";
+import { MEDIA_QUERY, RENDER_CONTAINER_WIDTH } from "../constants/style";
 
 type Props = {
   children: ReactNode;
@@ -45,13 +45,19 @@ const styles = {
     display: "flex",
     backgroundColor: "white",
     justifyContent: "center",
-    width: 420,
     height: "100vh",
     maxHeight: 900,
+    width: RENDER_CONTAINER_WIDTH,
     overflow: "scroll",
     borderRadius: 8,
+    borderStyle: "solid",
+    borderWidth: "0px 5px",
+    borderColor: colors.crimson,
     [MEDIA_QUERY.maxWidth]: {
-      width: "100%",
+      width: "100vw",
+      paddingLeft: 0,
+      paddingRight: 0,
+      border: "0px",
     },
   }),
 };

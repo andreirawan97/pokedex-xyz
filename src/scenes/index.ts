@@ -1,3 +1,4 @@
 import HomeScene from "./HomeScene";
+import PokedexScene from "./PokedexScene";
 
-export { HomeScene };
+export { HomeScene, PokedexScene };

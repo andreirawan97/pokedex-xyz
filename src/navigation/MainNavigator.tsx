@@ -1,15 +1,17 @@
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Route, useLocation } from "react-router-dom";
 
-import { HomeScene } from "../scenes";
+import { SlideRoutes } from "../components";
+import { HomeScene, PokedexScene } from "../scenes";
+
+import "./MainNavigator.css";
 
 export default function MainNavigator() {
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/">
-          <HomeScene />
-        </Route>
-      </Switch>
-    </BrowserRouter>
+    <SlideRoutes location={location} duration={400}>
+      <Route exact path="/" component={HomeScene} />
+      <Route exact path="/pokedex" component={PokedexScene} />
+    </SlideRoutes>
   );
 }

@@ -1,8 +1,10 @@
 import { css } from "@emotion/css";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import { mysticImage, valorImage, instinctImage } from "../assets";
 import { ModuleSelection, SearchBar } from "../components";
+import { SCENE_NAME } from "../constants/navigation";
 import { STORAGE_KEYS } from "../constants/storageKey";
 import { FONT_SIZE } from "../constants/style";
 import { Row, Text } from "../core-ui";
@@ -14,6 +16,8 @@ export default function HomeScene() {
     getDataFromStorage(STORAGE_KEYS.teamPreference)
   );
   const [searchQuery, setSearchQuery] = useState("");
+
+  const history = useHistory();
 
   const getTeamImage = () => {
     switch (teamPreference) {
@@ -72,7 +76,20 @@ export default function HomeScene() {
         onChangeText={setSearchQuery}
       />
 
-      <ModuleSelection moduleType="pokedex" />
+      {/* <Fade left cascade opposite duration={500}> */}
+      <div>
+        <ModuleSelection
+          containerClassName={styles.moduleContainer}
+          moduleType="pokedex"
+          onClick={() => history.push(SCENE_NAME.pokedex)}
+        />
+
+        <ModuleSelection
+          containerClassName={styles.moduleContainer}
+          moduleType="myPokemon"
+        />
+      </div>
+      {/* </Fade> */}
     </div>
   );
 }
@@ -81,9 +98,9 @@ const styles = {
   root: css({
     display: "flex",
     flexDirection: "column",
-    paddingLeft: 24,
-    paddingRight: 24,
     paddingTop: 56,
+    marginLeft: 32,
+    marginRight: 32,
   }),
   headerContainer: css({
     marginBottom: 18,
@@ -109,5 +126,8 @@ const styles = {
   }),
   searchBar: css({
     marginBottom: 24,
+  }),
+  moduleContainer: css({
+    marginBottom: 16,
   }),
 };

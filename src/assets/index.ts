@@ -4,6 +4,7 @@ import mysticImage from "./mystic.png";
 import valorImage from "./valor.png";
 import instinctImage from "./instinct.png";
 import pokedexImage from "./pokedex.png";
+import myPokemonImage from "./myPokemon.png";
 
 export {
   pokemonBackground,
@@ -12,4 +13,5 @@ export {
   valorImage,
   instinctImage,
   pokedexImage,
+  myPokemonImage,
 };

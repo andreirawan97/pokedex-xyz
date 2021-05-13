@@ -1,4 +1,5 @@
-export const MEDIA_QUERY_WIDTH = 600;
+export const MEDIA_QUERY_WIDTH = 421;
+export const RENDER_CONTAINER_WIDTH = 400;
 
 export const MEDIA_QUERY = {
   maxWidth: `@media (max-width: ${MEDIA_QUERY_WIDTH}px)`,

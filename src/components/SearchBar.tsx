@@ -2,6 +2,7 @@ import { css } from "@emotion/css";
 import { SearchOutline as SearchOutlineIcon } from "react-ionicons";
 
 import { colors } from "../constants/colors";
+import { RENDER_CONTAINER_WIDTH } from "../constants/style";
 import { Row, TextField } from "../core-ui";
 
 type Props = {
@@ -32,6 +33,7 @@ export default function SearchBar(props: Props) {
 
 const styles = {
   container: css({
+    maxWidth: RENDER_CONTAINER_WIDTH - 108,
     backgroundColor: colors.lightGrey,
     paddingLeft: 16,
     paddingRight: 16,

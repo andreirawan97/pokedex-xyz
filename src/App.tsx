@@ -1,12 +1,16 @@
-import { RenderView } from "./components";
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 
+import { RenderView } from "./components";
 import MainNavigator from "./navigation/MainNavigator";
 
 function App() {
   return (
-    <RenderView>
-      <MainNavigator />
-    </RenderView>
+    <Router>
+      <RenderView>
+        <MainNavigator />
+      </RenderView>
+    </Router>
   );
 }
 
