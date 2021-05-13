@@ -96,14 +96,17 @@ export default function HomeScene() {
 
 const styles = {
   root: css({
+    width: "100vw",
     display: "flex",
     flexDirection: "column",
     paddingTop: 56,
-    marginLeft: 32,
-    marginRight: 32,
+    marginLeft: 21,
+    marginRight: 21,
   }),
   headerContainer: css({
     marginBottom: 18,
+    display: "flex",
+    justifyContent: "space-between",
   }),
   headerTextContainer: css({
     display: "flex",

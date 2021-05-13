@@ -44,7 +44,6 @@ const styles = {
     zIndex: 1,
     display: "flex",
     backgroundColor: "white",
-    justifyContent: "center",
     height: "100vh",
     maxHeight: 900,
     width: RENDER_CONTAINER_WIDTH,

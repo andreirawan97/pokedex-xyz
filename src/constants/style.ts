@@ -9,6 +9,7 @@ export const MEDIA_QUERY = {
 export const FONT_SIZE = {
   small: 12,
   default: 14,
+  medium: 16,
   large: 20,
   extraLarge: 26,
   gigantic: 36,

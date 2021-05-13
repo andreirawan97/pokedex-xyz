@@ -2,7 +2,7 @@ import { css } from "@emotion/css";
 
 import { myPokemonImage, pokedexImage } from "../assets";
 import { colors } from "../constants/colors";
-import { FONT_SIZE, RENDER_CONTAINER_WIDTH } from "../constants/style";
+import { FONT_SIZE } from "../constants/style";
 import { Text } from "../core-ui";
 
 import "./ModuleSelection.css";
@@ -63,7 +63,6 @@ export default function ModuleSelection(props: Props) {
 
 const styles = {
   container: css({
-    maxWidth: RENDER_CONTAINER_WIDTH - 108,
     display: "flex",
     borderRadius: 20,
     paddingLeft: 18,
