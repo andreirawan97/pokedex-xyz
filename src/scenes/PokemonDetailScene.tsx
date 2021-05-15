@@ -12,7 +12,7 @@ import {
 import { GET_POKEMON_DETAIL } from "../graphql/server/getPokemonDetail";
 import { PokemonDetailSceneParams } from "../types/navigation";
 import { colors } from "../constants/colors";
-import { Loading, Row, Text } from "../core-ui";
+import { Loading, Row, Text, TextField } from "../core-ui";
 import { FONT_SIZE } from "../constants/style";
 import { sanitizeName } from "../helpers/stringManipulation";
 import {
@@ -22,6 +22,7 @@ import {
   Tabs,
 } from "../components";
 import { SCENE_NAME } from "../constants/navigation";
+import { STORAGE_KEYS } from "../constants/storageKey";
 import isPokemonCaught from "../helpers/isPokemonCaught";
 import {
   pokeballImage,
@@ -29,6 +30,9 @@ import {
   successCatchImage,
   failedCatchImage,
 } from "../assets";
+import { getDataFromStorage, setDataToStorage } from "../helpers/storage";
+import { MyPokemon } from "../types/globalTypes";
+import checkDuplicatePokemon from "../helpers/checkDuplicatePokemon";
 
 import "./PokemonDetailScene.css";
 
@@ -36,9 +40,10 @@ export default function PokemonDetailScene() {
   const history = useHistory();
   const { pokemonId } = useParams<PokemonDetailSceneParams>();
 
-  const [showCatchResultModal, setCatchResultModal] = useState(false);
-  const [modalContent, setModalContent] = useState(<></>);
+  const [showSuccessModal, setSuccessModal] = useState(false);
+  const [showFailedModal, setFailedModal] = useState(false);
   const [pokemonName, setPokemonName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { data, loading } = useQuery<
     GetPokemonDetail,
@@ -60,12 +65,70 @@ export default function PokemonDetailScene() {
     // @ts-ignore
     colors.pokemonTypes[firstPokemonType ? firstPokemonType : "default"];
 
+  const onCatchPokemon = () => {
+    setPokemonName(sanitizeName(pokemonData?.name));
+    if (isPokemonCaught()) {
+      setSuccessModal(true);
+    } else {
+      setFailedModal(true);
+    }
+  };
+
+  const saveToMyPokemon = () => {
+    let tmpMyPokemons: Array<MyPokemon> = JSON.parse(
+      getDataFromStorage(STORAGE_KEYS.myPokemons) ?? "[]"
+    );
+
+    if (checkDuplicatePokemon(pokemonName.trim())) {
+      setErrorMessage("Please choose a different pokemon name!");
+    } else if (pokemonName.trim() === "") {
+      setErrorMessage("Pokemon name cannot be empty!");
+    } else {
+      if (pokemonData) {
+        setErrorMessage("");
+
+        tmpMyPokemons.push({
+          id: pokemonData?.id,
+          name: pokemonName,
+        });
+
+        setDataToStorage(
+          STORAGE_KEYS.myPokemons,
+          JSON.stringify(tmpMyPokemons)
+        );
+        setSuccessModal(false);
+      } else {
+        setErrorMessage("Unknown error occured!");
+      }
+    }
+  };
+
   const SuccessModalContent = () => (
     <div className={styles.catchResultModalContent}>
       <img alt="" src={successCatchImage} className={styles.catchResultImage} />
       <Text className={styles.catchResultText}>Success!</Text>
+
+      <TextField
+        className={styles.inputPokemonName}
+        value={pokemonName}
+        onChangeText={setPokemonName}
+        placeholder="Enter a pokemon name..."
+      />
+
+      <div className={styles.inputPokemonNameDivider} />
+
+      <Text className={styles.successText}>was successfully caught!</Text>
+
+      {errorMessage && (
+        <Text className={styles.errorMessage}>{errorMessage}</Text>
+      )}
+
+      <Text className={styles.buttonSaveToMyPokemon} onClick={saveToMyPokemon}>
+        Save to My Pokemon!
+      </Text>
     </div>
   );
+
   const FailedModalContent = () => (
     <div className={styles.catchResultModalContent}>
       <img alt="" src={failedCatchImage} className={styles.catchResultImage} />
@@ -73,22 +136,12 @@ export default function PokemonDetailScene() {
 
       <Text
         className={styles.buttonCloseModal}
-        onClick={() => setCatchResultModal(false)}
+        onClick={() => setFailedModal(false)}
       >
         Close
       </Text>
     </div>
   );
-
-  const onCatchPokemon = () => {
-    if (isPokemonCaught()) {
-      setModalContent(SuccessModalContent);
-    } else {
-      setModalContent(FailedModalContent);
-    }
-    setPokemonName(sanitizeName(pokemonData?.name));
-    setCatchResultModal(true);
-  };
 
   return (
     <div className={styles.root}>
@@ -239,9 +292,14 @@ export default function PokemonDetailScene() {
 
       <Modal
         contentContainerClassName={styles.catchResultModalContent}
-        isShown={showCatchResultModal}
-        content={modalContent}
-        onDismiss={() => setCatchResultModal(false)}
+        isShown={showSuccessModal}
+        content={SuccessModalContent}
+      />
+
+      <Modal
+        contentContainerClassName={styles.catchResultModalContent}
+        isShown={showFailedModal}
+        content={FailedModalContent}
       />
     </div>
   );
@@ -371,6 +429,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
+    padding: 16,
   }),
   catchResultImage: css({
     width: 100,
@@ -392,5 +451,38 @@ const styles = {
     paddingBottom: 12,
     paddingLeft: 24,
     paddingRight: 24,
+  }),
+  inputPokemonName: css({
+    marginTop: 18,
+    fontSize: FONT_SIZE.medium,
+    fontWeight: "bold",
+    color: colors.slateBlue,
+  }),
+  inputPokemonNameDivider: css({
+    height: 2,
+    backgroundColor: colors.slateBlue,
+    marginBottom: 6,
+  }),
+  successText: css({
+    fontSize: FONT_SIZE.default,
+    marginBottom: 6,
+  }),
+  buttonSaveToMyPokemon: css({
+    fontWeight: "bold",
+    color: colors.white,
+    fontSize: FONT_SIZE.medium,
+    marginTop: 6,
+    cursor: "pointer",
+    backgroundColor: colors.slateBlue,
+    borderRadius: 24,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 24,
+    paddingRight: 24,
+  }),
+  errorMessage: css({
+    fontSize: FONT_SIZE.default,
+    color: colors.pastelRed,
+    fontWeight: "bold",
   }),
 };

@@ -5,7 +5,7 @@ import { colors } from "../constants/colors";
 
 type Props = {
   isShown: boolean;
-  content?: ReactNode;
+  content: () => ReactNode;
   contentContainerClassName?: string;
   onDismiss?: () => void;
 };
@@ -25,7 +25,7 @@ export default function Modal(props: Props) {
             <div
               className={`${styles.modalContainer} ${contentContainerClassName}`}
             >
-              {content}
+              {content && content()}
             </div>
           </Bounce>
         </div>
@@ -68,7 +68,7 @@ const styles = {
     position: "absolute",
     width: 300,
     minHeight: 300,
-    maxHeight: 450,
+    maxHeight: 500,
     backgroundColor: colors.white,
     borderRadius: 24,
     overflow: "scroll",

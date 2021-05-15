@@ -9,7 +9,7 @@ type Props = {
 } & HTMLAttributes<HTMLInputElement>;
 
 export default function TextField(props: Props) {
-  const { onChangeText, value } = props;
+  const { onChangeText, value, className } = props;
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChangeText && onChangeText(e.target.value);
@@ -17,10 +17,10 @@ export default function TextField(props: Props) {
 
   return (
     <input
+      {...props}
       value={value}
       onChange={onChange}
-      className={`text-field ${styles.container}`}
-      {...props}
+      className={`text-field ${styles.container} ${className}`}
     />
   );
 }
