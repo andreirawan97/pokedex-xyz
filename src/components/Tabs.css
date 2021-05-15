@@ -1,0 +1,67 @@
+/* Source: https://blog.brettsnaidero.com/tabs/ with some modification */
+
+/* Tabs */
+.tabs {
+  display: block;
+  position: relative;
+}
+
+.tabs-list {
+  display: flex;
+  border-bottom: 3px solid #ecf0f5;
+  justify-content: center;
+}
+
+.tabs-list__item {
+  margin-right: 30px;
+}
+
+.tabs-list__tab {
+  display: block;
+  color: #a0a0a0;
+  padding: 18px 6px;
+  background: none;
+  transition: background-color 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  text-decoration: none;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tabs-list__tab:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  height: 3px;
+  width: 100%;
+}
+
+.tabs-list__tab:hover {
+  color: #6972da;
+}
+
+.tabs-list__tab.active {
+  color: #2c3642;
+}
+
+.tabs-list__tab.active:after {
+  background-color: #6972da;
+}
+
+.tabs-list__tab.active.animating:after {
+  background-color: transparent;
+}
+
+.tabs-list__underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: #6972da;
+}
+
+ul {
+  list-style-type: none;
+}

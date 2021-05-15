@@ -6,6 +6,8 @@ import instinctImage from "./instinct.png";
 import pokedexImage from "./pokedex.png";
 import myPokemonImage from "./myPokemon.png";
 import mewImage from "./mew.png";
+import rotomBackgroundImage from "./rotom.jpeg";
+import pokedexBackground from "./pokedexBackground.png";
 
 export {
   pokemonBackground,
@@ -16,4 +18,6 @@ export {
   pokedexImage,
   myPokemonImage,
   mewImage,
+  rotomBackgroundImage,
+  pokedexBackground,
 };

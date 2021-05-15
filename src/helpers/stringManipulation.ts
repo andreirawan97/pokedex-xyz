@@ -7,13 +7,15 @@ export function capitilizedFirstLetter(str: string) {
 }
 
 // nidoran-male to Nidoran Male
-export function sanitizeName(name: string) {
+export function sanitizeName(name: string | undefined) {
   return name
-    .split("-")
-    .map((word) => {
-      return word[0].toUpperCase() + word.substring(1);
-    })
-    .join(" ");
+    ? name
+        .split("-")
+        .map((word) => {
+          return word[0].toUpperCase() + word.substring(1);
+        })
+        .join(" ")
+    : "";
 }
 
 // Nidoran Male to nidoran-male

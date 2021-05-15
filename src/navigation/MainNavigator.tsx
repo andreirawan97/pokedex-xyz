@@ -17,7 +17,7 @@ export default function MainNavigator() {
       <Route exact path={SCENE_NAME.pokedex} component={PokedexScene} />
       <Route
         exact
-        path={`${SCENE_NAME.pokemonDetail}:pokemonName`}
+        path={`${SCENE_NAME.pokemonDetail}:pokemonId`}
         component={PokemonDetailScene}
       />
       <Route path="*">

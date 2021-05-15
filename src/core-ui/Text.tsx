@@ -17,5 +17,7 @@ export default function Text(props: Props) {
 const styles = {
   defaultText: css({
     fontFamily: "Roboto",
+    display: "flex",
+    flexDirection: "row",
   }),
 };

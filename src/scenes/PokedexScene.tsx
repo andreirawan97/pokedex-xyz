@@ -1,11 +1,16 @@
+import React from "react";
 import { css } from "@emotion/css";
 import { useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { ArrowBack as ArrowBackIcon } from "react-ionicons";
+import {
+  ArrowBack as ArrowBackIcon,
+  ChevronBack as ChevronBackIcon,
+  ChevronForward as ChevronForwardIcon,
+} from "react-ionicons";
 
 import { colors } from "../constants/colors";
 import { Loading, Row, Text } from "../core-ui";
-import { FONT_SIZE } from "../constants/style";
+import { FONT_SIZE, RENDER_CONTAINER_WIDTH } from "../constants/style";
 import { GET_POKEMONS } from "../graphql/server/getPokemons";
 import {
   GetPokemons,
@@ -17,7 +22,10 @@ import { pokedexImage } from "../assets";
 import { useState } from "react";
 import { SCENE_NAME } from "../constants/navigation";
 
+import "./PokedexScene.css";
+
 export default function PokedexScene() {
+  const MAX_PAGE = 96;
   const history = useHistory();
 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Page is Offset * 10. Page 0 is page 1
@@ -40,7 +48,7 @@ export default function PokedexScene() {
   };
 
   const onClickPokemon = (pokemon: GetPokemons_pokemon_v2_pokemon) => {
-    history.push(`${SCENE_NAME.pokemonDetail}${pokemon.name}`);
+    history.push(`${SCENE_NAME.pokemonDetail}${pokemon.id}`);
   };
 
   return (
@@ -60,9 +68,11 @@ export default function PokedexScene() {
         <img alt="" src={pokedexImage} width={65} height={65} />
       </div>
 
+      <Text className={styles.pageNumber}>Page {currentPageIndex + 1}</Text>
+
       <div className={styles.pokemonListContainer}>
-        {data?.pokemon_v2_pokemon.map((pokemon) => (
-          <div className={styles.pokemonSelectionContainer}>
+        {data?.pokemon_v2_pokemon.map((pokemon, i) => (
+          <div key={i} className={styles.pokemonSelectionContainer}>
             <PokemonSelection
               onClick={() => onClickPokemon(pokemon)}
               pokemon={pokemon}
@@ -71,18 +81,32 @@ export default function PokedexScene() {
         ))}
       </div>
 
-      <Row className={styles.pageButtonContainer}>
-        {!loading && data && currentPageIndex > 0 && (
-          <div className={styles.pageButton} onClick={onClickBack}>
+      {!loading && data && (
+        <Row className={`shadow ${styles.pageButtonContainer}`}>
+          <div
+            className={styles.pageButton}
+            onClick={() => currentPageIndex > 0 && onClickBack()}
+          >
+            <ChevronBackIcon color={colors.white} width="12px" />
             <Text className={styles.pageButtonText}>Back</Text>
           </div>
-        )}
-        {!loading && data && currentPageIndex !== 96 && (
-          <div className={styles.pageButton} onClick={onClickNext}>
+
+          <Text className={styles.pageNumber}>{currentPageIndex + 1}</Text>
+
+          <div
+            className={styles.pageButton}
+            onClick={() => currentPageIndex !== MAX_PAGE && onClickNext()}
+          >
             <Text className={styles.pageButtonText}>Next</Text>
+            <ChevronForwardIcon color={colors.white} width="12px" />
           </div>
-        )}
-      </Row>
+        </Row>
+      )}
+
+      <Text className={styles.easterEgg}>Easter Egg, lol</Text>
+      <Text className={styles.easterEgg}>
+        Somehow margin bottom didn't work here
+      </Text>
 
       <Loading loading={loading} />
     </div>
@@ -107,7 +131,7 @@ const styles = {
     fontWeight: "bold",
   }),
   headerContainer: css({
-    marginBottom: 18,
+    marginBottom: 12,
     marginLeft: 16,
     display: "flex",
     flexDirection: "row",
@@ -125,15 +149,9 @@ const styles = {
     display: "flex",
   }),
   pageButton: css({
-    backgroundColor: colors.crimson,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 21,
-    paddingRight: 21,
-    borderRadius: 4,
-    marginRight: 8,
-    marginLeft: 8,
-    marginBottom: 56,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     cursor: "pointer",
   }),
   pageButtonText: css({
@@ -143,5 +161,22 @@ const styles = {
   pageButtonContainer: css({
     marginTop: 12,
     justifyContent: "center",
+    position: "absolute",
+    bottom: 12,
+    backgroundColor: colors.slateBlue,
+    borderRadius: 18,
+    height: 48,
+    width: RENDER_CONTAINER_WIDTH - 18,
+  }),
+  pageNumber: css({
+    fontWeight: "bold",
+    fontSize: FONT_SIZE.medium,
+    color: colors.white,
+    marginLeft: 42,
+    marginRight: 42,
+  }),
+  easterEgg: css({
+    color: colors.white,
+    marginBottom: 20,
   }),
 };

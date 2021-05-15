@@ -1,4 +1,5 @@
 import { css } from "@emotion/css";
+import { PokemonTypeChip } from ".";
 
 import { colors } from "../constants/colors";
 import { FONT_SIZE } from "../constants/style";
@@ -23,18 +24,6 @@ export default function PokemonSelection(props: Props) {
   const backgroundColor =
     // @ts-ignore
     colors.pokemonTypes[firstPokemonType ? firstPokemonType : "default"];
-
-  const PokemonTypeChip = ({
-    pokemonType,
-  }: {
-    pokemonType: string | undefined;
-  }) => (
-    <div className={styles.pokemonTypeChip} onClick={() => onClick && onClick}>
-      <Text className={styles.pokemonType}>
-        {pokemonType ? sanitizeName(pokemonType) : ""}
-      </Text>
-    </div>
-  );
 
   return (
     <div
@@ -88,19 +77,5 @@ const styles = {
   pokemonImage: css({
     width: 65,
     height: 65,
-  }),
-  pokemonTypeChip: css({
-    backgroundColor: "rgba(255,255,255,0.4)",
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
-    borderRadius: 12,
-    marginRight: 4,
-  }),
-  pokemonType: css({
-    fontWeight: "bold",
-    fontSize: FONT_SIZE.small,
-    color: colors.white,
   }),
 };

@@ -1,3 +1,3 @@
 export type PokemonDetailSceneParams = {
-  pokemonName: string | undefined;
+  pokemonId: string | undefined;
 };
