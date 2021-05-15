@@ -11,7 +11,7 @@ export default function Loading(props: Props) {
 
   return (
     <div className={styles.container}>
-      <SyncLoader color={colors.crimson} loading={loading} size={15} />
+      <SyncLoader color={colors.slateBlue} loading={loading} size={15} />
     </div>
   );
 }

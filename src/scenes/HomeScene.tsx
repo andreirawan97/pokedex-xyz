@@ -81,7 +81,7 @@ export default function HomeScene() {
         <ModuleSelection
           containerClassName={styles.moduleContainer}
           moduleType="pokedex"
-          onClick={() => history.push(SCENE_NAME.pokedex)}
+          onClick={() => history.replace(SCENE_NAME.pokedex)}
         />
 
         <ModuleSelection

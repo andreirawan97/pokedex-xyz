@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { css } from "@emotion/css";
 import { useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
@@ -10,7 +10,11 @@ import {
 
 import { colors } from "../constants/colors";
 import { Loading, Row, Text } from "../core-ui";
-import { FONT_SIZE, RENDER_CONTAINER_WIDTH } from "../constants/style";
+import {
+  FONT_SIZE,
+  MEDIA_QUERY,
+  RENDER_CONTAINER_WIDTH,
+} from "../constants/style";
 import { GET_POKEMONS } from "../graphql/server/getPokemons";
 import {
   GetPokemons,
@@ -23,12 +27,18 @@ import { useState } from "react";
 import { SCENE_NAME } from "../constants/navigation";
 
 import "./PokedexScene.css";
+import { getDataFromStorage, setDataToStorage } from "../helpers/storage";
+import { STORAGE_KEYS } from "../constants/storageKey";
 
 export default function PokedexScene() {
   const MAX_PAGE = 96;
   const history = useHistory();
 
-  const [currentPageIndex, setCurrentPageIndex] = useState(0); // Page is Offset * 10. Page 0 is page 1
+  const [currentPageIndex, setCurrentPageIndex] = useState(
+    getDataFromStorage(STORAGE_KEYS.lastPokedexIndex)
+      ? Number(getDataFromStorage(STORAGE_KEYS.lastPokedexIndex))
+      : 0
+  ); // Page is Offset * 10. Page 0 is page 1
 
   const { data, loading } = useQuery<GetPokemons, GetPokemonsVariables>(
     GET_POKEMONS,
@@ -39,6 +49,17 @@ export default function PokedexScene() {
     }
   );
 
+  useEffect(() => {
+    if (currentPageIndex < 0) {
+      setCurrentPageIndex(0);
+      setDataToStorage(STORAGE_KEYS.lastPokedexIndex, 0);
+    }
+  }, [currentPageIndex]);
+
+  useEffect(() => {
+    setDataToStorage(STORAGE_KEYS.lastPokedexIndex, currentPageIndex);
+  }, [currentPageIndex]);
+
   const onClickNext = () => {
     setCurrentPageIndex(currentPageIndex + 1);
   };
@@ -48,7 +69,7 @@ export default function PokedexScene() {
   };
 
   const onClickPokemon = (pokemon: GetPokemons_pokemon_v2_pokemon) => {
-    history.push(`${SCENE_NAME.pokemonDetail}${pokemon.id}`);
+    history.replace(`${SCENE_NAME.pokemonDetail}${pokemon.id}`);
   };
 
   return (
@@ -60,7 +81,7 @@ export default function PokedexScene() {
             width="28px"
             height="28px"
             cssClasses={styles.backButton}
-            onClick={history.goBack}
+            onClick={() => history.replace(SCENE_NAME.home)}
           />
           <Text className={styles.headerTitle}>Pokédex</Text>
         </div>
@@ -167,6 +188,11 @@ const styles = {
     borderRadius: 18,
     height: 48,
     width: RENDER_CONTAINER_WIDTH - 18,
+    [MEDIA_QUERY.maxWidth]: {
+      width: "auto",
+      left: 12,
+      right: 12,
+    },
   }),
   pageNumber: css({
     fontWeight: "bold",

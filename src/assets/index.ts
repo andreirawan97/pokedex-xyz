@@ -8,6 +8,9 @@ import myPokemonImage from "./myPokemon.png";
 import mewImage from "./mew.png";
 import rotomBackgroundImage from "./rotom.jpeg";
 import pokedexBackground from "./pokedexBackground.png";
+import pokeballImage from "./pokeball.png";
+import successCatchImage from "./successCatch.png";
+import failedCatchImage from "./failedCatch.png";
 
 export {
   pokemonBackground,
@@ -20,4 +23,7 @@ export {
   mewImage,
   rotomBackgroundImage,
   pokedexBackground,
+  pokeballImage,
+  successCatchImage,
+  failedCatchImage,
 };

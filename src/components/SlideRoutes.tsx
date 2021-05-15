@@ -171,7 +171,7 @@ const SlideRoutes = ({
 
       if (nextIndex === -1) {
         move.current = "next";
-        historyList.push(pathname);
+        historyList.replace(pathname);
       } else {
         move.current = "back";
         historyList.length = nextIndex + 1;

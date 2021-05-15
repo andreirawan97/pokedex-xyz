@@ -1,14 +1,18 @@
 import { css } from "@emotion/css";
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
   className?: string;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
 export default function Row(props: Props) {
   const { className } = props;
-  return <div className={`${styles.row} ${className}`}>{props.children}</div>;
+  return (
+    <div {...props} className={`${styles.row} ${className}`}>
+      {props.children}
+    </div>
+  );
 }
 
 const styles = {

@@ -24,7 +24,7 @@ export default function SearchBar(props: Props) {
       <TextField
         value={value}
         onChangeText={onChangeText}
-        placeholder="Enter pokemon name"
+        placeholder="Search Pokemon, Move, Item, etc"
       />
     </Row>
   );
