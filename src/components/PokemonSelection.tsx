@@ -1,5 +1,6 @@
 import { css } from "@emotion/css";
 import { PokemonTypeChip } from ".";
+import { Fade } from "react-reveal";
 
 import { colors } from "../constants/colors";
 import { FONT_SIZE } from "../constants/style";
@@ -12,10 +13,12 @@ import "./PokemonSelection.css";
 type Props = {
   pokemon: GetPokemons_pokemon_v2_pokemon;
   onClick?: (pokemonName: string) => void;
+  mode?: "pokedex" | "myPokemons";
+  onReleasePokemon?: (pokemonName: string) => void;
 };
 
 export default function PokemonSelection(props: Props) {
-  const { onClick, pokemon } = props;
+  const { onClick, pokemon, mode = "pokedex", onReleasePokemon } = props;
 
   const firstPokemonType =
     pokemon.pokemon_v2_pokemontypes[0].pokemon_v2_type?.name;
@@ -26,26 +29,52 @@ export default function PokemonSelection(props: Props) {
     colors.pokemonTypes[firstPokemonType ? firstPokemonType : "default"];
 
   return (
-    <div
-      className={`pokemon-selection ${styles.container} ${css({
-        backgroundColor,
-      })}`}
-      onClick={() => onClick && onClick(pokemon.name)}
-    >
-      <div className={styles.contentContainer}>
-        <Text className={styles.pokemonNumber}>#{pokemon.id}</Text>
+    <Fade duration={600}>
+      <div
+        className={`pokemon-selection ${styles.container} ${css({
+          backgroundColor,
+        })}`}
+        onClick={() => onClick && onClick(pokemon.name)}
+      >
+        <div
+          className={
+            mode === "pokedex"
+              ? styles.contentContainer
+              : styles.contentContainerCenter
+          }
+        >
+          {mode === "pokedex" && (
+            <Text className={styles.pokemonNumber}>#{pokemon.id}</Text>
+          )}
 
-        <img alt="" src={pokemonImageURI} className={styles.pokemonImage} />
+          <img
+            alt=""
+            src={pokemonImageURI}
+            width={mode === "pokedex" ? 65 : 80}
+            height={mode === "pokedex" ? 65 : 80}
+          />
+        </div>
+
+        <Text className={styles.pokemonName}>{sanitizeName(pokemon.name)}</Text>
+
+        <Row>
+          {pokemon.pokemon_v2_pokemontypes.map((pokemonType) => (
+            <PokemonTypeChip pokemonType={pokemonType.pokemon_v2_type?.name} />
+          ))}
+        </Row>
+
+        {mode === "myPokemons" && (
+          <Text
+            className={styles.releaseButton}
+            onClick={() => {
+              onReleasePokemon && onReleasePokemon(pokemon.name);
+            }}
+          >
+            Release
+          </Text>
+        )}
       </div>
-
-      <Text className={styles.pokemonName}>{sanitizeName(pokemon.name)}</Text>
-
-      <Row>
-        {pokemon.pokemon_v2_pokemontypes.map((pokemonType) => (
-          <PokemonTypeChip pokemonType={pokemonType.pokemon_v2_type?.name} />
-        ))}
-      </Row>
-    </div>
+    </Fade>
   );
 }
 
@@ -74,8 +103,23 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
   }),
-  pokemonImage: css({
-    width: 65,
-    height: 65,
+  contentContainerCenter: css({
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+  }),
+  releaseButton: css({
+    fontWeight: "bold",
+    color: colors.white,
+    fontSize: FONT_SIZE.medium,
+    marginTop: 12,
+    cursor: "pointer",
+    backgroundColor: colors.pastelRed,
+    borderRadius: 18,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    textAlign: "center",
   }),
 };

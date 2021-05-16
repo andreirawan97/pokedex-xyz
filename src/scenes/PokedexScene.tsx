@@ -81,7 +81,10 @@ export default function PokedexScene() {
             width="28px"
             height="28px"
             cssClasses={styles.backButton}
-            onClick={() => history.replace(SCENE_NAME.home)}
+            onClick={() => {
+              history.replace(SCENE_NAME.home);
+              setDataToStorage(STORAGE_KEYS.lastPokedexIndex, 0);
+            }}
           />
           <Text className={styles.headerTitle}>Pokédex</Text>
         </div>
@@ -154,6 +157,7 @@ const styles = {
   headerContainer: css({
     marginBottom: 12,
     marginLeft: 16,
+    marginRight: 16,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",

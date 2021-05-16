@@ -6,6 +6,7 @@ import {
   NoMatchScene,
   PokedexScene,
   PokemonDetailScene,
+  MyPokemonsScene,
 } from "../scenes";
 
 export default function MainNavigator() {
@@ -15,6 +16,7 @@ export default function MainNavigator() {
     <Switch location={location}>
       <Route exact path={SCENE_NAME.home} component={HomeScene} />
       <Route exact path={SCENE_NAME.pokedex} component={PokedexScene} />
+      <Route exact path={SCENE_NAME.myPokemons} component={MyPokemonsScene} />
       <Route
         exact
         path={`${SCENE_NAME.pokemonDetail}:pokemonId`}

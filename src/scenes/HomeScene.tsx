@@ -87,6 +87,7 @@ export default function HomeScene() {
         <ModuleSelection
           containerClassName={styles.moduleContainer}
           moduleType="myPokemon"
+          onClick={() => history.replace(SCENE_NAME.myPokemons)}
         />
       </div>
       {/* </Fade> */}

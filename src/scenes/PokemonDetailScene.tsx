@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router";
 import { css } from "@emotion/css";
 import { ArrowBack as ArrowBackIcon } from "react-ionicons";
 import { HashRouter as Router } from "react-router-dom";
+import Lottie from "react-lottie";
 
 import {
   GetPokemonDetail,
@@ -31,7 +32,8 @@ import {
   failedCatchImage,
 } from "../assets";
 import { getDataFromStorage, setDataToStorage } from "../helpers/storage";
-import { MyPokemon } from "../types/globalTypes";
+import { MyPokemons } from "../types/globalTypes";
+import { successAnimation, swabluAnimation } from "../lottie";
 import checkDuplicatePokemon from "../helpers/checkDuplicatePokemon";
 
 import "./PokemonDetailScene.css";
@@ -44,6 +46,8 @@ export default function PokemonDetailScene() {
   const [showFailedModal, setFailedModal] = useState(false);
   const [pokemonName, setPokemonName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showSavedModal, setSavedModal] = useState(false);
+  const [showCatchingModal, setCatchingModal] = useState(false);
 
   const { data, loading } = useQuery<
     GetPokemonDetail,
@@ -66,17 +70,22 @@ export default function PokemonDetailScene() {
     colors.pokemonTypes[firstPokemonType ? firstPokemonType : "default"];
 
   const onCatchPokemon = () => {
-    setPokemonName(sanitizeName(pokemonData?.name));
-    if (isPokemonCaught()) {
-      setSuccessModal(true);
-    } else {
-      setFailedModal(true);
-    }
+    setCatchingModal(true);
+
+    setTimeout(() => {
+      setCatchingModal(false);
+      setPokemonName(sanitizeName(pokemonData?.name));
+      if (isPokemonCaught()) {
+        setSuccessModal(true);
+      } else {
+        setFailedModal(true);
+      }
+    }, 1200);
   };
 
   const saveToMyPokemon = () => {
-    let tmpMyPokemons: Array<MyPokemon> = JSON.parse(
-      getDataFromStorage(STORAGE_KEYS.myPokemons) ?? "[]"
+    let tmpMyPokemons: MyPokemons = JSON.parse(
+      getDataFromStorage(STORAGE_KEYS.myPokemons) ?? `[]`
     );
 
     if (checkDuplicatePokemon(pokemonName.trim())) {
@@ -88,8 +97,8 @@ export default function PokemonDetailScene() {
         setErrorMessage("");
 
         tmpMyPokemons.push({
-          id: pokemonData?.id,
-          name: pokemonName,
+          ...pokemonData,
+          nickname: pokemonName,
         });
 
         setDataToStorage(
@@ -97,11 +106,23 @@ export default function PokemonDetailScene() {
           JSON.stringify(tmpMyPokemons)
         );
         setSuccessModal(false);
+        setSavedModal(true);
       } else {
         setErrorMessage("Unknown error occured!");
       }
     }
   };
+
+  const CatchingModalContent = () => (
+    <div className={styles.catchResultModalContent}>
+      <Lottie
+        options={{ animationData: swabluAnimation }}
+        width={150}
+        height={150}
+      />
+      <Text className={styles.catchingText}>Catching pokemon...</Text>
+    </div>
+  );
 
   const SuccessModalContent = () => (
     <div className={styles.catchResultModalContent}>
@@ -129,6 +150,24 @@ export default function PokemonDetailScene() {
     </div>
   );
 
+  const SavedModalContent = () => (
+    <div className={styles.catchResultModalContent}>
+      <Lottie
+        options={{ loop: false, animationData: successAnimation }}
+        width={200}
+        height={200}
+      />
+      <Text className={styles.savedText}>Saved!</Text>
+
+      <Text
+        className={styles.buttonCloseModal}
+        onClick={() => setSavedModal(false)}
+      >
+        Close
+      </Text>
+    </div>
+  );
+
   const FailedModalContent = () => (
     <div className={styles.catchResultModalContent}>
       <img alt="" src={failedCatchImage} className={styles.catchResultImage} />
@@ -151,7 +190,8 @@ export default function PokemonDetailScene() {
         >
           <ArrowBackIcon
             color="rgba(255,255,255,0.7)"
-            width="21px"
+            width="28px"
+            height="28px"
             cssClasses={styles.arrowBack}
             onClick={() => history.replace(SCENE_NAME.pokedex)}
           />
@@ -292,8 +332,20 @@ export default function PokemonDetailScene() {
 
       <Modal
         contentContainerClassName={styles.catchResultModalContent}
+        isShown={showCatchingModal}
+        content={CatchingModalContent}
+      />
+
+      <Modal
+        contentContainerClassName={styles.catchResultModalContent}
         isShown={showSuccessModal}
         content={SuccessModalContent}
+      />
+
+      <Modal
+        contentContainerClassName={styles.catchResultModalContent}
+        isShown={showSavedModal}
+        content={SavedModalContent}
       />
 
       <Modal
@@ -484,5 +536,15 @@ const styles = {
     fontSize: FONT_SIZE.default,
     color: colors.pastelRed,
     fontWeight: "bold",
+  }),
+  savedText: css({
+    fontSize: FONT_SIZE.large,
+    fontWeight: "bold",
+    marginTop: -50,
+  }),
+  catchingText: css({
+    fontWeight: "bold",
+    fontSize: FONT_SIZE.large,
+    marginTop: 8,
   }),
 };
