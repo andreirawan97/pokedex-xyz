@@ -37,6 +37,7 @@ import { successAnimation, swabluAnimation } from "../lottie";
 import checkDuplicatePokemon from "../helpers/checkDuplicatePokemon";
 
 import "./PokemonDetailScene.css";
+import { getOwnedPokemonCount } from "../helpers/getOwnedPokemonCount";
 
 export default function PokemonDetailScene() {
   const history = useHistory();
@@ -202,6 +203,10 @@ export default function PokemonDetailScene() {
             </Text>
             <Text className={styles.pokedexNumber}>#{pokemonData.id}</Text>
           </div>
+
+          <Text className={styles.owned}>
+            Owned: {getOwnedPokemonCount(pokemonData.name)}
+          </Text>
 
           <Row>
             {pokemonData.pokemon_v2_pokemontypes.map((pokemonType, i) => (
@@ -377,7 +382,7 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 6,
   }),
   pokemonName: css({
     fontWeight: "bold",
@@ -546,5 +551,10 @@ const styles = {
     fontWeight: "bold",
     fontSize: FONT_SIZE.large,
     marginTop: 8,
+  }),
+  owned: css({
+    fontSize: FONT_SIZE.default,
+    color: colors.white,
+    marginBottom: 8,
   }),
 };

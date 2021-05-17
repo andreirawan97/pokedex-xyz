@@ -9,6 +9,7 @@ import { GetPokemons_pokemon_v2_pokemon } from "../generated/server/GetPokemons"
 import { sanitizeName } from "../helpers/stringManipulation";
 
 import "./PokemonSelection.css";
+import { getOwnedPokemonCount } from "../helpers/getOwnedPokemonCount";
 
 type Props = {
   pokemon: GetPokemons_pokemon_v2_pokemon;
@@ -34,34 +35,45 @@ export default function PokemonSelection(props: Props) {
         className={`pokemon-selection ${styles.container} ${css({
           backgroundColor,
         })}`}
-        onClick={() => onClick && onClick(pokemon.name)}
       >
-        <div
-          className={
-            mode === "pokedex"
-              ? styles.contentContainer
-              : styles.contentContainerCenter
-          }
-        >
+        <div onClick={() => onClick && onClick(pokemon.name)}>
+          <div
+            className={
+              mode === "pokedex"
+                ? styles.contentContainer
+                : styles.contentContainerCenter
+            }
+          >
+            {mode === "pokedex" && (
+              <Text className={styles.pokemonNumber}>#{pokemon.id}</Text>
+            )}
+
+            <img
+              alt=""
+              src={pokemonImageURI}
+              width={mode === "pokedex" ? 65 : 80}
+              height={mode === "pokedex" ? 65 : 80}
+            />
+          </div>
+
+          <Text className={styles.pokemonName}>
+            {sanitizeName(pokemon.name)}
+          </Text>
+
           {mode === "pokedex" && (
-            <Text className={styles.pokemonNumber}>#{pokemon.id}</Text>
+            <Text className={styles.owned}>
+              Owned: {getOwnedPokemonCount(pokemon.name)}
+            </Text>
           )}
 
-          <img
-            alt=""
-            src={pokemonImageURI}
-            width={mode === "pokedex" ? 65 : 80}
-            height={mode === "pokedex" ? 65 : 80}
-          />
+          <Row>
+            {pokemon.pokemon_v2_pokemontypes.map((pokemonType) => (
+              <PokemonTypeChip
+                pokemonType={pokemonType.pokemon_v2_type?.name}
+              />
+            ))}
+          </Row>
         </div>
-
-        <Text className={styles.pokemonName}>{sanitizeName(pokemon.name)}</Text>
-
-        <Row>
-          {pokemon.pokemon_v2_pokemontypes.map((pokemonType) => (
-            <PokemonTypeChip pokemonType={pokemonType.pokemon_v2_type?.name} />
-          ))}
-        </Row>
 
         {mode === "myPokemons" && (
           <Text
@@ -121,5 +133,10 @@ const styles = {
     paddingLeft: 12,
     paddingRight: 12,
     textAlign: "center",
+  }),
+  owned: css({
+    fontSize: FONT_SIZE.default,
+    color: colors.white,
+    marginBottom: 8,
   }),
 };
