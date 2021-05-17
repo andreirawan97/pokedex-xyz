@@ -57,7 +57,8 @@ export default function PokemonSelection(props: Props) {
           </div>
 
           <Text className={styles.pokemonName}>
-            {sanitizeName(pokemon.name)}
+            {/* @ts-ignore */}
+            {mode === "pokedex" ? sanitizeName(pokemon.name) : pokemon.nickname}
           </Text>
 
           {mode === "pokedex" && (

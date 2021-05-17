@@ -1,6 +1,7 @@
 import { css } from "@emotion/css";
 import { useHistory } from "react-router";
 import { ArrowBack as ArrowBackIcon } from "react-ionicons";
+import Lottie from "react-lottie";
 
 import { bellsproutImage, myPokemonImage } from "../assets";
 import { colors } from "../constants/colors";
@@ -9,10 +10,11 @@ import { STORAGE_KEYS } from "../constants/storageKey";
 import { Text } from "../core-ui";
 import { getDataFromStorage, setDataToStorage } from "../helpers/storage";
 import { FONT_SIZE } from "../constants/style";
-import { PokemonSelection } from "../components";
+import { Modal, PokemonSelection } from "../components";
 import { GetPokemons_pokemon_v2_pokemon } from "../generated/server/GetPokemons";
 import { useState } from "react";
 import { MyPokemons } from "../types/globalTypes";
+import { successAnimation, swabluAnimation } from "../lottie";
 
 export default function MyPokemonsScene() {
   const history = useHistory();
@@ -20,16 +22,53 @@ export default function MyPokemonsScene() {
   const [myPokemons, setMyPokemons] = useState<MyPokemons>(
     JSON.parse(getDataFromStorage(STORAGE_KEYS.myPokemons) ?? `[]`)
   );
+  const [showReleasingModal, setReleasingModal] = useState(false);
+  const [showReleasedModal, setReleasedModal] = useState(false);
 
   const onClickPokemon = (pokemon: GetPokemons_pokemon_v2_pokemon) => {
     history.replace(`${SCENE_NAME.pokemonDetail}${pokemon.id}`);
   };
 
   const onClickRelease = (index: number) => {
-    let tmpMyPokemons = myPokemons.filter((_, i) => i !== index);
-    setMyPokemons(tmpMyPokemons);
-    setDataToStorage(STORAGE_KEYS.myPokemons, JSON.stringify(tmpMyPokemons));
+    setReleasingModal(true);
+
+    setTimeout(() => {
+      let tmpMyPokemons = myPokemons.filter((_, i) => i !== index);
+      setMyPokemons(tmpMyPokemons);
+      setDataToStorage(STORAGE_KEYS.myPokemons, JSON.stringify(tmpMyPokemons));
+      setReleasingModal(false);
+      setReleasedModal(true);
+    }, 1500);
   };
+
+  const ReleasingModalContent = () => (
+    <div className={styles.releaseModalContent}>
+      <Lottie
+        options={{ animationData: swabluAnimation }}
+        width={150}
+        height={150}
+      />
+      <Text className={styles.catchingText}>Releasing pokemon...</Text>
+    </div>
+  );
+
+  const ReleasedModalContent = () => (
+    <div className={styles.releaseModalContent}>
+      <Lottie
+        options={{ loop: false, animationData: successAnimation }}
+        width={200}
+        height={200}
+      />
+      <Text className={styles.savedText}>Released!</Text>
+
+      <Text
+        className={styles.buttonCloseModal}
+        onClick={() => setReleasedModal(false)}
+      >
+        Close
+      </Text>
+    </div>
+  );
 
   return (
     <div className={styles.root}>
@@ -75,6 +114,18 @@ export default function MyPokemonsScene() {
           </div>
         )}
       </div>
+
+      <Modal
+        contentContainerClassName={styles.releaseModalContent}
+        isShown={showReleasingModal}
+        content={ReleasingModalContent}
+      />
+
+      <Modal
+        contentContainerClassName={styles.releaseModalContent}
+        isShown={showReleasedModal}
+        content={ReleasedModalContent}
+      />
     </div>
   );
 }
@@ -135,5 +186,39 @@ const styles = {
   caption: css({
     textAlign: "center",
     marginBottom: 6,
+  }),
+  releaseModalContent: css({
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    padding: 16,
+  }),
+  buttonText: css({
+    color: colors.white,
+    fontWeight: "bold",
+  }),
+  savedText: css({
+    fontSize: FONT_SIZE.large,
+    fontWeight: "bold",
+    marginTop: -50,
+  }),
+  buttonCloseModal: css({
+    fontWeight: "bold",
+    color: colors.white,
+    fontSize: FONT_SIZE.medium,
+    marginTop: 36,
+    cursor: "pointer",
+    backgroundColor: colors.slateBlue,
+    borderRadius: 24,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 24,
+    paddingRight: 24,
+  }),
+  catchingText: css({
+    fontWeight: "bold",
+    fontSize: FONT_SIZE.large,
+    marginTop: 8,
   }),
 };

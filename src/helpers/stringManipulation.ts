@@ -1,3 +1,4 @@
+// Unused
 export function capitilizedFirstLetter(str: string) {
   if (str && str[0]) {
     return `${str[0].toUpperCase()}${str.slice(1)}`;

@@ -6,6 +6,7 @@ import {
   ArrowBack as ArrowBackIcon,
   ChevronBack as ChevronBackIcon,
   ChevronForward as ChevronForwardIcon,
+  Shuffle as ShuffleIcon,
 } from "react-ionicons";
 
 import { colors } from "../constants/colors";
@@ -68,6 +69,11 @@ export default function PokedexScene() {
     setCurrentPageIndex(currentPageIndex - 1);
   };
 
+  const onClickShuffle = () => {
+    const randomPageIndex = Math.floor(Math.random() * MAX_PAGE);
+    setCurrentPageIndex(randomPageIndex);
+  };
+
   const onClickPokemon = (pokemon: GetPokemons_pokemon_v2_pokemon) => {
     history.replace(`${SCENE_NAME.pokemonDetail}${pokemon.id}`);
   };
@@ -115,7 +121,13 @@ export default function PokedexScene() {
             <Text className={styles.pageButtonText}>Back</Text>
           </div>
 
-          <Text className={styles.pageNumber}>{currentPageIndex + 1}</Text>
+          <ShuffleIcon
+            color={colors.white}
+            width="28px"
+            height="28px"
+            cssClasses={styles.shuffle}
+            onClick={onClickShuffle}
+          />
 
           <div
             className={styles.pageButton}
@@ -163,6 +175,12 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
   }),
+  pageNumber: css({
+    fontWeight: "bold",
+    fontSize: FONT_SIZE.large,
+    marginLeft: 16,
+    marginBottom: 12,
+  }),
   pokemonListContainer: css({
     display: "flex",
     flexDirection: "row",
@@ -187,6 +205,7 @@ const styles = {
     marginTop: 12,
     justifyContent: "center",
     position: "absolute",
+    alignItems: "center",
     bottom: 12,
     backgroundColor: colors.slateBlue,
     borderRadius: 18,
@@ -198,12 +217,10 @@ const styles = {
       right: 12,
     },
   }),
-  pageNumber: css({
-    fontWeight: "bold",
-    fontSize: FONT_SIZE.medium,
-    color: colors.white,
+  shuffle: css({
     marginLeft: 42,
     marginRight: 42,
+    cursor: "pointer",
   }),
   easterEgg: css({
     color: colors.white,
