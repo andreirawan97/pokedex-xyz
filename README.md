@@ -1,7 +1,7 @@
 # Hello!
 
 Welcome to third and final Pokedex app. I created this app because i am not satisfied with the previous version (pokedoxx) and decide to remake the Pokedex.
-You can view the app in [here](pokedex-xyz.netlify.app).
+You can view the app in [here](https://pokedex-xyz.netlify.app).
 
 What can i do with this app?
 
