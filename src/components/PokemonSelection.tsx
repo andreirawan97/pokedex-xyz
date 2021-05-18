@@ -134,6 +134,8 @@ const styles = {
     paddingLeft: 12,
     paddingRight: 12,
     textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
   }),
   owned: css({
     fontSize: FONT_SIZE.default,

@@ -15,8 +15,8 @@ it("should change pikachu to Pikachu", () => {
 });
 
 it("should change Nidoran Male to nidoran-male", () => {
-  let input = "nidoran-male";
-  let expectedResult = "Nidoran Male";
+  let input = "Nidoran Male";
+  let expectedResult = "nidoran-male";
 
   expect(desanitizeName(input)).toEqual(expectedResult);
 });

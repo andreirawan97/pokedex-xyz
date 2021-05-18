@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
 import { useHistory, useParams } from "react-router";
 import { css } from "@emotion/css";
 import { ArrowBack as ArrowBackIcon } from "react-ionicons";
 import { HashRouter as Router } from "react-router-dom";
 import Lottie from "react-lottie";
 
-import {
-  GetPokemonDetail,
-  GetPokemonDetailVariables,
-} from "../generated/server/GetPokemonDetail";
-import { GET_POKEMON_DETAIL } from "../graphql/server/getPokemonDetail";
 import { PokemonDetailSceneParams } from "../types/navigation";
 import { colors } from "../constants/colors";
 import { Loading, Row, Text, TextField } from "../core-ui";
@@ -18,6 +12,7 @@ import { FONT_SIZE } from "../constants/style";
 import { sanitizeName } from "../helpers/stringManipulation";
 import {
   Modal,
+  NoResultFound,
   PokemonTypeChip,
   PokemonWeightHeight,
   Tabs,
@@ -38,10 +33,11 @@ import checkDuplicatePokemon from "../helpers/checkDuplicatePokemon";
 
 import "./PokemonDetailScene.css";
 import { getOwnedPokemonCount } from "../helpers/getOwnedPokemonCount";
+import useGetPokemonDetail from "../hooks/useGetPokemonDetail";
 
 export default function PokemonDetailScene() {
   const history = useHistory();
-  const { pokemonId } = useParams<PokemonDetailSceneParams>();
+  const { searchQuery } = useParams<PokemonDetailSceneParams>();
 
   const [showSuccessModal, setSuccessModal] = useState(false);
   const [showFailedModal, setFailedModal] = useState(false);
@@ -50,14 +46,7 @@ export default function PokemonDetailScene() {
   const [showSavedModal, setSavedModal] = useState(false);
   const [showCatchingModal, setCatchingModal] = useState(false);
 
-  const { data, loading } = useQuery<
-    GetPokemonDetail,
-    GetPokemonDetailVariables
-  >(GET_POKEMON_DETAIL, {
-    variables: {
-      pokemonId: Number(pokemonId),
-    },
-  });
+  const { data, loading } = useGetPokemonDetail(searchQuery);
 
   const pokemonData = data?.pokemon_v2_pokemon[0];
   const pokemonFlavorText = data?.pokemon_v2_pokemonspeciesflavortext[0];
@@ -294,7 +283,7 @@ export default function PokemonDetailScene() {
                   route: "moves",
                   render: () => (
                     <div className={styles.movesContainer}>
-                      {pokemonMoves ? (
+                      {pokemonMoves && pokemonMoves?.length !== 0 ? (
                         pokemonMoves.map((move) => (
                           <div>
                             <Text className={styles.moveName}>
@@ -322,7 +311,9 @@ export default function PokemonDetailScene() {
                           </div>
                         ))
                       ) : (
-                        <Text>No move found</Text>
+                        <Text className={styles.noMoveFound}>
+                          No move found
+                        </Text>
                       )}
                     </div>
                   ),
@@ -331,6 +322,13 @@ export default function PokemonDetailScene() {
             />
           </Router>
         </div>
+      )}
+
+      {!loading && !pokemonData && (
+        <NoResultFound
+          searchTerm={searchQuery}
+          onClickBack={() => history.replace(SCENE_NAME.pokedex)}
+        />
       )}
 
       <Loading loading={loading} />
@@ -418,6 +416,12 @@ const styles = {
   flavorText: css({
     fontSize: FONT_SIZE.default,
     marginBottom: 8,
+  }),
+  noMoveFound: css({
+    fontSize: FONT_SIZE.default,
+    marginBottom: 8,
+    display: "flex",
+    justifyContent: "center",
   }),
   weightHeightContainer: css({
     display: "flex",

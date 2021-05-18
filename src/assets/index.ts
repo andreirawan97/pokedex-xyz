@@ -12,6 +12,7 @@ import pokeballImage from "./pokeball.png";
 import successCatchImage from "./successCatch.png";
 import failedCatchImage from "./failedCatch.png";
 import bellsproutImage from "./bellsprout.png";
+import meowthImage from "./meowth.png";
 
 export {
   pokemonBackground,
@@ -28,4 +29,5 @@ export {
   successCatchImage,
   failedCatchImage,
   bellsproutImage,
+  meowthImage,
 };

@@ -1,5 +1,5 @@
 export type PokemonDetailSceneParams = {
-  pokemonId: string | undefined;
+  searchQuery: string | undefined;
 };
 
 export type PokemonDetailSceneNavigationState = {

@@ -4,11 +4,13 @@ import { useHistory } from "react-router-dom";
 
 import { mysticImage, valorImage, instinctImage } from "../assets";
 import { ModuleSelection, SearchBar } from "../components";
+import { SearchTerm } from "../components/SearchBar";
 import { SCENE_NAME } from "../constants/navigation";
 import { STORAGE_KEYS } from "../constants/storageKey";
 import { FONT_SIZE } from "../constants/style";
 import { Row, Text } from "../core-ui";
 import { getDataFromStorage, setDataToStorage } from "../helpers/storage";
+import { desanitizeName } from "../helpers/stringManipulation";
 import { TeamPreference } from "../types/globalTypes";
 
 export default function HomeScene() {
@@ -52,6 +54,15 @@ export default function HomeScene() {
     setDataToStorage(STORAGE_KEYS.teamPreference, tmpTeamPreference);
   };
 
+  const onClickSearchAnchor = (searchTerm: SearchTerm) => {
+    console.log(searchTerm);
+    if (searchTerm === "Pokemon") {
+      history.replace(
+        `${SCENE_NAME.pokemonDetail}${desanitizeName(searchQuery)}`
+      );
+    }
+  };
+
   return (
     <div className={styles.root}>
       <Row className={styles.headerContainer}>
@@ -74,6 +85,7 @@ export default function HomeScene() {
         containerClassName={styles.searchBar}
         value={searchQuery}
         onChangeText={setSearchQuery}
+        onClickSearchAnchor={onClickSearchAnchor}
       />
 
       {/* <Fade left cascade opposite duration={500}> */}

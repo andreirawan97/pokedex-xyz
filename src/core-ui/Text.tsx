@@ -8,7 +8,7 @@ type Props = {
 export default function Text(props: Props) {
   const { className } = props;
   return (
-    <div className={`${styles.defaultText} ${className}`} {...props}>
+    <div {...props} className={`${styles.defaultText} ${className}`}>
       {props.children}
     </div>
   );
@@ -19,5 +19,6 @@ const styles = {
     fontFamily: "Roboto",
     display: "flex",
     flexDirection: "row",
+    alignItems: "center",
   }),
 };

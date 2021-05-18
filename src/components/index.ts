@@ -6,6 +6,7 @@ import PokemonTypeChip from "./PokemonTypeChip";
 import Tabs from "./Tabs";
 import PokemonWeightHeight from "./PokemonWeightHeight";
 import Modal from "./Modal";
+import NoResultFound from "./NoResultFound";
 
 export {
   RenderView,
@@ -16,4 +17,5 @@ export {
   Tabs,
   PokemonWeightHeight,
   Modal,
+  NoResultFound,
 };
