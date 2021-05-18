@@ -3,6 +3,7 @@ import { meowthImage } from "../assets";
 import { colors } from "../constants/colors";
 import { FONT_SIZE } from "../constants/style";
 import { Text } from "../core-ui";
+import { sanitizeName } from "../helpers/stringManipulation";
 
 type Props = {
   searchTerm?: string;
@@ -23,7 +24,8 @@ export default function NoResultFound(props: Props) {
       />
       <Text className={styles.oops}>Oops! :(</Text>
       <Text className={styles.caption}>
-        Meowth couldn't find "{searchTerm}".
+        Meowth couldn't find
+        <Text className={styles.blueText}>"{sanitizeName(searchTerm)}"</Text>.
       </Text>
       <Text className={styles.caption}>
         Make sure you type it correctly because it's sensitive (as sensitive as
@@ -57,6 +59,11 @@ const styles = {
   caption: css({
     textAlign: "center",
     marginBottom: 6,
+  }),
+  blueText: css({
+    color: colors.slateBlue,
+    fontWeight: "bold",
+    marginLeft: 4,
   }),
   takeMeBack: css({
     borderRadius: 8,

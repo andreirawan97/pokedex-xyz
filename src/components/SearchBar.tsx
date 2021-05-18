@@ -49,20 +49,21 @@ export default function SearchBar(props: Props) {
         />
       </Row>
 
-      <Fade collapse when={showSearchAnchor}>
+      <Fade collapse when={showSearchAnchor && value}>
         <div className={styles.searchAnchorContainer}>
           {SEARCH_TERMS.map((searchTerm) => (
             <div
               className={styles.searchAnchor}
               onClick={() => {
                 showSearchAnchor &&
+                  value?.trim() &&
                   onClickSearchAnchor &&
                   onClickSearchAnchor(searchTerm);
               }}
             >
               <div className={styles.leftView} />
               <Text className={styles.searchAnchorText}>
-                Find "{value}" in{" "}
+                Find "{value}" in
                 <Text className={styles.searchTerm}>{searchTerm}</Text>
               </Text>
             </div>
@@ -88,7 +89,7 @@ const styles = {
   searchAnchorContainer: css({
     display: "flex",
     flexDirection: "column",
-    marginLeft: 42,
+    marginLeft: 24,
     marginTop: 8,
     cursor: "pointer",
   }),
@@ -96,7 +97,7 @@ const styles = {
     width: 4,
     height: "auto",
     backgroundColor: colors.slateBlue,
-    marginRight: 6,
+    marginRight: 15,
   }),
   searchAnchor: css({
     display: "flex",
