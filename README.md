@@ -11,9 +11,11 @@ What can i do with this app?
 
 ✅ Can catch Pokemon
 
+✅ Search pokemon
+
 Future update(s):
 
-❌ An optional search feature! (It's around the corner)
+❌ Search item and move
 
 ❌ View items in Pokemon
 
